@@ -180,7 +180,13 @@ const UploadjobDescription: React.FC = () => {
         //     formData.append("resumes_files", file);
         // });
 
-        const csrfToken = (window as any).csrf_token;
+        const getCookie = (name: string) => {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop()?.split(';').shift();
+        };
+
+        const csrfToken = (window as any).csrf_token || getCookie('frappe_csrf_token');
 
         try {
             const response = await fetch("/api/method/resume_lens.api.process_resumes",
@@ -188,7 +194,7 @@ const UploadjobDescription: React.FC = () => {
                     method: "POST",
                     credentials: "include",
                     headers: {
-                        "X-Frappe-CSRF-Token": csrfToken,
+                        "X-Frappe-CSRF-Token": csrfToken || "",
                     },
                     body: formData,
                 }
