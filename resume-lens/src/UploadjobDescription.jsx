@@ -37,10 +37,11 @@ const UploadjobDescription = () => {
     const csrfToken = window.csrf_token || getCookie('frappe_csrf_token');
 
     try {
-      const response = await fetch("/xyz", {
+      const response = await fetch("/api/method/resume_lens.api.process_resumes", {
         method: "POST",
         headers: {
           "X-Frappe-CSRF-Token": csrfToken || "",
+          "Accept": "application/json",
         },
         body: formData,
       });

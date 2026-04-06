@@ -195,6 +195,7 @@ const UploadjobDescription: React.FC = () => {
                     credentials: "include",
                     headers: {
                         "X-Frappe-CSRF-Token": csrfToken || "",
+                        "Accept": "application/json",
                     },
                     body: formData,
                 }
@@ -288,9 +289,9 @@ const UploadjobDescription: React.FC = () => {
     };
 
     // Function to chunk base64 encoding to avoid stack overflow
-    const base64EncodeChunked = (arrayBuffer: ArrayBuffer) => { // ADDED: Type annotation for arrayBuffer
+    const base64EncodeChunked = (arrayBuffer: ArrayBuffer | Uint8Array) => { // FIXED: Accepted either ArrayBuffer or Uint8Array
         let base64String = '';
-        const byteArray = new Uint8Array(arrayBuffer);
+        const byteArray = arrayBuffer instanceof Uint8Array ? arrayBuffer : new Uint8Array(arrayBuffer);
         const chunkSize = 4096; // Adjust chunk size if needed
         for (let i = 0; i < byteArray.length; i += chunkSize) {
             const chunk = byteArray.subarray(i, i + chunkSize);
